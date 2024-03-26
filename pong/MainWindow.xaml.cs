@@ -21,6 +21,7 @@ namespace pong
         private Ball ball;
         private Player mousePlayer;
         private Player keyboardPlayer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,6 +31,40 @@ namespace pong
         {
             KeyboardPlayer.Content = keyboardPlayer.Points.ToString();
             MousePlayer.Content = mousePlayer.Points.ToString();
+        }
+
+        private void Frame_Tick(object? sender, EventArgs e)
+        {
+            if (ball.X <= 0)
+            {
+                mousePlayer.Points += 1;
+                UpdatePlayerScores();
+                ball.Reset();
+            }
+            if (ball.X >= ball.Canvas.Width)
+            {
+                keyboardPlayer.Points += 1;
+                UpdatePlayerScores();
+                ball.Reset();
+            }
+
+            //Obliczenia pozycji piłki dla gracza na klawiaturze
+            if (ball.Y >= keyboardPlayer.Y 
+                && ball.Y <= keyboardPlayer.Y + keyboardPlayer.Height 
+                && ball.X <= keyboardPlayer.X + keyboardPlayer.Width 
+                && ball.X >= keyboardPlayer.X)
+            {
+                ball.DirectionX *= -1;
+            }
+            //Obliczenia pozycji piłki dla gracza na myszce
+            if (ball.Y >= mousePlayer.Y 
+                && ball.Y <= mousePlayer.Y + mousePlayer.Height 
+                && ball.X >= mousePlayer.X - ball.Width 
+                && ball.X <= mousePlayer.X + mousePlayer.Width)
+            {
+                ball.DirectionX *= -1;
+            }
+            ball.Move();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -55,7 +90,7 @@ namespace pong
                     mousePlayer.Reset();
                     keyboardPlayer.Reset();
                     ball.Reset();
-                    UpdateScores();
+                    UpdatePlayerScores();
                     break;
             }
         }
