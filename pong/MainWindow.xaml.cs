@@ -17,50 +17,64 @@ namespace pong
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DispatcherTimer timer;
+        private DispatcherTimer game_timer;
         private Ball ball;
-        private Player mousePlayer;
-        private Player keyboardPlayer;
+        private Player player_mouse;
+        private Player player_keyboard;
 
         public MainWindow()
         {
             InitializeComponent();
+            //Utworzenie podstawowych obiektów
+
+            ball = 
+                new Ball(10, 10, MainCanavs);
+            player_mouse = 
+                new Player(MainCanavs, 10, 100, new SolidColorBrush(Colors.White), false);
+            player_keyboard = 
+                new Player(MainCanavs, 10, 100, new SolidColorBrush(Colors.White), true);
+
+            //Obsługa FPS
+            game_timer = new DispatcherTimer();
+            game_timer.Interval = TimeSpan.FromMilliseconds(16);
+            game_timer.Tick += Frame_Tick;
+            game_timer.Start();
         }
 
         private void UpdatePlayerScores()
         {
-            KeyboardPlayer.Content = keyboardPlayer.Points.ToString();
-            MousePlayer.Content = mousePlayer.Points.ToString();
+            KeyboardPlayer.Content = player_keyboard.Points.ToString();
+            MousePlayer.Content = player_mouse.Points.ToString();
         }
 
         private void Frame_Tick(object? sender, EventArgs e)
         {
             if (ball.X <= 0)
             {
-                mousePlayer.Points += 1;
+                player_mouse.Points += 1;
                 UpdatePlayerScores();
                 ball.Reset();
             }
             if (ball.X >= ball.Canvas.Width)
             {
-                keyboardPlayer.Points += 1;
+                player_keyboard.Points += 1;
                 UpdatePlayerScores();
                 ball.Reset();
             }
 
             //Obliczenia pozycji piłki dla gracza na klawiaturze
-            if (ball.Y >= keyboardPlayer.Y 
-                && ball.Y <= keyboardPlayer.Y + keyboardPlayer.Height 
-                && ball.X <= keyboardPlayer.X + keyboardPlayer.Width 
-                && ball.X >= keyboardPlayer.X)
+            if (ball.Y >= player_keyboard.Y 
+                && ball.Y <= player_keyboard.Y + player_keyboard.Height 
+                && ball.X <= player_keyboard.X + player_keyboard.Width 
+                && ball.X >= player_keyboard.X)
             {
                 ball.DirectionX *= -1;
             }
             //Obliczenia pozycji piłki dla gracza na myszce
-            if (ball.Y >= mousePlayer.Y 
-                && ball.Y <= mousePlayer.Y + mousePlayer.Height 
-                && ball.X >= mousePlayer.X - ball.Width 
-                && ball.X <= mousePlayer.X + mousePlayer.Width)
+            if (ball.Y >= player_mouse.Y 
+                && ball.Y <= player_mouse.Y + player_mouse.Height 
+                && ball.X >= player_mouse.X - ball.Width 
+                && ball.X <= player_mouse.X + player_mouse.Width)
             {
                 ball.DirectionX *= -1;
             }
@@ -75,20 +89,20 @@ namespace pong
                     this.Close();
                     break;
                 case Key.W:
-                    if (keyboardPlayer.Y <= 0)
+                    if (player_keyboard.Y <= 0)
                         return;
-                    keyboardPlayer.Y -= 10;
-                    keyboardPlayer.Draw();
+                    player_keyboard.Y -= 10;
+                    player_keyboard.Draw();
                     break;
                 case Key.S:
-                    if (keyboardPlayer.Y + keyboardPlayer.Height >= MainCanavs.Height)
+                    if (player_keyboard.Y + player_keyboard.Height >= MainCanavs.Height)
                         return;
-                    keyboardPlayer.Y += 10;
-                    keyboardPlayer.Draw();
+                    player_keyboard.Y += 10;
+                    player_keyboard.Draw();
                     break;
                 case Key.R:
-                    mousePlayer.Reset();
-                    keyboardPlayer.Reset();
+                    player_mouse.Reset();
+                    player_keyboard.Reset();
                     ball.Reset();
                     UpdatePlayerScores();
                     break;
@@ -97,10 +111,10 @@ namespace pong
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Mouse.GetPosition(this).Y + mousePlayer.Height >= MainCanavs.Height)
+            if (Mouse.GetPosition(this).Y + player_mouse.Height >= MainCanavs.Height)
                 return;
-            mousePlayer.Y = Mouse.GetPosition(this).Y;
-            mousePlayer.Draw();
+            player_mouse.Y = Mouse.GetPosition(this).Y;
+            player_mouse.Draw();
         }
     }
 }
