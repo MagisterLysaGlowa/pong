@@ -25,5 +25,11 @@ namespace pong
         {
             InitializeComponent();
         }
+
+        private void UpdatePlayerScores()
+        {
+            KeyboardPlayer.Content = keyboardPlayer.Points.ToString();
+            MousePlayer.Content = mousePlayer.Points.ToString();
+        }
     }
 }
