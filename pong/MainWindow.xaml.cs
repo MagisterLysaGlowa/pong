@@ -31,5 +31,13 @@ namespace pong
             KeyboardPlayer.Content = keyboardPlayer.Points.ToString();
             MousePlayer.Content = mousePlayer.Points.ToString();
         }
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (Mouse.GetPosition(this).Y + mousePlayer.Height >= MainCanavs.Height)
+                return;
+            mousePlayer.Y = Mouse.GetPosition(this).Y;
+            mousePlayer.Draw();
+        }
     }
 }
