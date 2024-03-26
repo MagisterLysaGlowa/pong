@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pong"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Black"
+        WindowStartupLocation="CenterScreen"
+        KeyDown="Window_KeyDown"
+        MouseMove="Window_MouseMove">
     <Grid>
-
+        <Canvas x:Name="MainCanavs" Width="800" Height="450">
+            <Label x:Name="KeyboardPlayer" FontSize="20" Content="0" Foreground="White" Canvas.Left="200" Canvas.Top="50"/>
+            <Label x:Name="MousePlayer" FontSize="20" Content="0" Foreground="White" Canvas.Right="200" Canvas.Top="50"/>
+        </Canvas>
     </Grid>
 </Window>
