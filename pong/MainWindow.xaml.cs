@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace pong
 {
@@ -16,6 +17,10 @@ namespace pong
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer timer;
+        private Ball ball;
+        private Player mousePlayer;
+        private Player keyboardPlayer;
         public MainWindow()
         {
             InitializeComponent();
